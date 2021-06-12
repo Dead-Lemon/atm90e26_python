@@ -1,4 +1,4 @@
-# ATM90E26 Driver in Python3 for Onion Omega 2+
+# ATM90E26 Driver in Python3 for IOT2000
 
 This python driver consists of :
 * Registers list
@@ -6,4 +6,4 @@ This python driver consists of :
 * Basic initialization code
 * Utility methods to read Voltage, Current, Power, Power. Factor for 1 phase
 
-Implemented using half-duplex mode (xfer3) from [python-spidev](https://github.com/OnionIoT/python-spidev)
+Implemented using Intels MRAA IO overlay library [python-mraa](http://iotdk.intel.com/docs/master/mraa/python/mraa.html?highlight=spi#spi)

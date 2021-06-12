@@ -1,4 +1,4 @@
-import spidev
+import mraa
 from atm90e26_registers import *
 
 import time
@@ -6,6 +6,7 @@ import struct
 import binascii
 __write__ = False
 __read__ = True
+
 class ATM90E26_SPI:
 
     '''       
@@ -34,12 +35,12 @@ class ATM90E26_SPI:
             ''' Must wait 4 us for data to become valid '''
             time.sleep(10e-6)
             # Write address
-            read_res = self.spi.xfer3(read_buf,2)
+            read_res = self.spi.write(read_buf)
             return read_res
         else: #0 as MSB and 32 clock cycles marks a write
             struct.pack_into('>B',write_buf,0,address)
             struct.pack_into('>H',write_buf,2,val)
-            self.spi.xfer(write_buf)# write all the bytes
+            self.spi.writeByte(write_buf)# write all the bytes
     
     def init_config(self):
         pass
@@ -59,12 +60,14 @@ class ATM90E26_SPI:
 
 
 if __name__=="__main__":
-    spi = spidev.SpiDev()
-    spi.open(0, 1)
-
-    spi.mode = 0b11
-    spi.max_speed_hz = 200000
-
+    spi = mraa.Spi(0)
+    spi.mode(3)
+    spi.frequency(2000000)
+    spi.lsbmode(False)
+    ss=mraa.Gpio(9)
+    ss.dir(mraa.DIR_OUT)
+    ss.write(1)
+      
     eic1 = ATM90E26_SPI(spi)
     for i in range(10):
         print("Meter Status:",eic1.get_meter_status())
